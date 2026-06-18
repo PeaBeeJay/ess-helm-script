@@ -210,7 +210,7 @@ server {
     location / {
         proxy_pass http://127.0.0.1:8080;
         proxy_set_header X-Forwarded-For $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Proto $scheme ; 
         proxy_set_header Host $host;
 
         client_max_body_size 50M;
@@ -233,7 +233,7 @@ server {
 }
 
 EOF
-systemctl restart ngninx
+systemctl restart nginx
 echo "You will need to manually add your certificate keys to etc/nginx/cert.pem and /etc/nginx/privkey.pem."
 fi
 sleep 5
