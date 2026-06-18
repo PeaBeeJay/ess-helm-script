@@ -235,6 +235,7 @@ server {
 EOF
 systemctl restart nginx
 echo "You will need to manually add your certificate keys to etc/nginx/cert.pem and /etc/nginx/privkey.pem."
+echo "Please run 'systemctl restart nginx' after adding certificate keys."
 fi
 sleep 5
 echo "Once you have finished setting up your reverse proxy, please run install.sh"
