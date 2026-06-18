@@ -259,6 +259,7 @@ server {
 }
 
 EOF
+systemctl restart ngninx
 echo "You will need to manually add your certificate keys to etc/nginx/cert.pem and /etc/nginx/privkey.pem."
 fi
 sleep 5
