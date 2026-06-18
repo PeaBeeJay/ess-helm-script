@@ -83,7 +83,7 @@ helm upgrade --install \
   -f ~/config-values.yaml
 
 echo "Install success! If you have not already, make an admin account
-by running 'kubectl exec -n ess -it deploy/ess-matrix-authentication-service -- mas-cli manage register-user'"
+by running 'kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user'"
 EOF
 
 #install ufw and configure firewall
