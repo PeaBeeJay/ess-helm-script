@@ -13,7 +13,7 @@ sleep 1
 echo "What is your domain name? Please input as domain.xyz (eg. google.com, whitehouse.gov>"
 read -r domain
 echo "Your server will be reached at chat.$domain, admin.$domain, and account.$domain"
-echo "Is this the domain you'd like to use? This cannot be changed later (Y/n)"
+echo "Is this the domain you'd like to use? This cannot be changed after running install.sh (Y/n)"
 read -r answer
 if [[ $answer = n ]];then
         echo "Exiting installer"
@@ -24,9 +24,10 @@ else
         sleep 1
 fi
 
+#check for curl
 echo "installing curl"
+dpkg -l | grep -qw curl || apt-get install curl
 apt install curl -y
-
 #setup config-values.yaml
 cat > config-values.yaml <<EOF
 # ess-values.yaml
@@ -100,18 +101,8 @@ echo "Firewall configured"
 
 #install K3s
 
-echo "Checking for curl, install if missing."
-dpkg -l | grep -qw curl || apt-get install curl
-
 LOCAL_IP=$(hostname -I | awk '{print $1}')
-
-
 curl -sfL https://get.k3s.io | sh -
-
-#this is for installing to the specific IP of machine, might be necessary
-#curl -sfL https://get.k3s.io | \
-#    INSTALL_K3S_EXEC="--node-ip=$LOCAL_IP" \
-#    sh -
 
 mkdir -p ~/.kube
 
@@ -125,9 +116,6 @@ chown "$USER:$USER" "$KUBECONFIG"
 export KUBECONFIG=~/.kube/config
 
 echo "configuring k3s"
-
-sleep 5
-
 touch /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
 cat > /var/lib/rancher/k3s/server/manifests/traefik-config.yaml <<EOF
 apiVersion: helm.cattle.io/v1
@@ -158,30 +146,17 @@ spec:
             allowEncodedSlash: true
 EOF
 
-
 #install helm package manager
 echo "installing helm..."
-
 curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 #create namespace
 echo "KUBECONFIG=$KUBECONFIG"
 ls -l "$KUBECONFIG"
 kubectl config current-context
-
 k3s kubectl create namespace ess
 
-#the below script will change the call the local ip of the machine, and change the traefik
-#ports from 80 and 443, to 8080 and 8443
-#this is required if you aleady have an existing reverse proxy which uses 80 and 443 for
-#http and https traffic
-#the rest of this script either sets up nginx, or assumes you have nginx setup already.
-
-
-
-#following line pulls local IP
 LOCAL_IP=$(ip route get 1.1.1.1 | awk '{print $7; exit}')
 
 if [ -z "$LOCAL_IP" ]; then
@@ -207,7 +182,6 @@ spec:
         externalIPs:
         - '$LOCAL_IP'
 EOF
-
 
 #install and configure nginx
 echo "Would you like to configure nginx? Skip if you have your own reverse proxy setup. (Y/n)"
