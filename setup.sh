@@ -24,10 +24,6 @@ else
         sleep 1
 fi
 
-#check for curl
-echo "installing curl"
-dpkg -l | grep -qw curl || apt-get install curl
-apt install curl -y
 #setup config-values.yaml
 cat > config-values.yaml <<EOF
 # ess-values.yaml
