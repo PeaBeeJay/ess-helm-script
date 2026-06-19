@@ -82,6 +82,8 @@ echo "Install success! If you have not already, make an admin account
 by running 'kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user'"
 EOF
 
+chmod +x install.sh
+
 #install ufw and configure firewall
 echo "Installing UFW"
 apt install ufw -y
@@ -179,59 +181,22 @@ spec:
         - '$LOCAL_IP'
 EOF
 
-#install and configure nginx
-echo "Would you like to configure nginx? Skip if you have your own reverse proxy setup. (Y/n)"
+#install and configure caddy
+echo "Would you like to configure caddy? Skip if you have your own reverse proxy setup. (Y/n)"
 read -r answer
 if [[ $answer = n ]];then
-        echo "Skipping nginx install"
-        echo "Please refer to the documentation to configure your reverse proxy."
-        echo "Server configuration complete! Please run install.sh to finish installation."
+        echo "Skipping caddy install"
+        echo "Please refer to the documentation to configure your reverse proxy. Run install.sh after configuration."
         sleep 3
 else
-        echo "Installing nginx...."
+        echo "Installing caddy...."
         sleep 1
-apt install nginx -y
-cat > /etc/nginx/sites-enabled/ess.yaml <<EOF
-server {
-    listen 443 ssl http2;
-    listen [::]:443 ssl http2;
-
-
-    ssl_certificate /etc/nginx/cert.pem;
-    ssl_certificate_key /etc/nginx/privkey.pem;
-
-
-    server_name chat.$domain matrix.$domain account.$domain mrtc.$domain;
-
-    location / {
-        proxy_pass http://127.0.0.1:8080;
-        proxy_set_header X-Forwarded-For $remote_addr;
-        proxy_set_header X-Forwarded-Proto $scheme ; 
-        proxy_set_header Host $host;
-
-        client_max_body_size 50M;
-
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection "upgrade";
-
-        proxy_read_timeout 86400s;
-        proxy_send_timeout 86400s;
-        proxy_buffering off;
-    }
+apt install caddy -y
+cat > /etc/caddy/Caddyfile <<EOF
+$domain matrix.$domain account.$domain mrtc.$domain chat.$domain admin.$domain {
+  reverse_proxy http://127.0.0.1:8080
 }
-
-server {
-    listen 80;
-    listen [::]:80;
-    server_name chat.$domain matrix.$domain account.$domain mrtc.$domain;
-    return 301 https://$host$request_uri;
-}
-
 EOF
-systemctl restart nginx
-echo "You will need to manually add your certificate keys to etc/nginx/cert.pem and /etc/nginx/privkey.pem."
-echo "Please run 'systemctl restart nginx' after adding certificate keys."
 fi
-sleep 5
-echo "Once you have finished setting up your reverse proxy, please run install.sh"
+#finish setup
+echo "Setup complete! Please run install.sh"
