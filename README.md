@@ -1,6 +1,6 @@
 # Unofficial Element Server Suite Install Script
 
-This script is meant to automate the installation of the Element Server Suite (ESS) using Helm Charts. 
+This script is meant to automate the installation of the [Element Server Suite](https://github.com/element-hq/ess-helm) (ESS) using Helm Charts. 
 
 I switched to using element as an alternative to discord, and would like to help more people do the same.
 
@@ -20,14 +20,17 @@ Install and configure
   - ufw + firewall rules
     - TCP 80, 443, 30001, and UDP 30002 must be allowed. OpenSSH is also configured.
   - traefik
+  - K3s kubernetes cluster
   - Helm Charts
 
 The only steps you need to complete outside of this script are pointing your domain to your server.
 
 ### Matrix Authentication Service
 
-This script configures MAS (matrix authentication service) to allow users to create their own accounts. The default installation assumes you will make a username and password for every member joining your server.
+This script configures MAS (matrix authentication service) to allow users to create their own accounts. The default installation from the official ESS github assumes you will make a username and password for every member joining your server. I find this annoying, so I allow users to create their own accounts. 
+
 To add security, I configure MAS with **registration keys**. 
+
 When setting up an account, a new user will be prompted to enter a registration key, which needs to be created in the admin panel.
 Keys can be setup with multiple options such as being one time use, or expiring after a certain amount of days if they haven't been used. 
 
@@ -45,6 +48,7 @@ Your DNS records should look like:
 
 ![screenshot of records](https://github.com/PeaBeeJay/ess-helm-script/blob/main/domains.png)  
 
+*(yes br4tz.com is the domain I am using in this example for testing, bratz.com was taken)*
 
 
   1. Make sure your system is up to date
@@ -61,3 +65,12 @@ Your DNS records should look like:
 The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`)
 
 The script will run through installing all the required packages and setting up necessary config files. The only part that will require input is at the end where it will ask if you want to configure , enter y for yes, or n if you intend to setup your own reverse proxy. 
+
+### After setup script is complete, run install.sh
+`./install.sh`
+
+This will install the element server with the configured options in `config-values.yaml`, which you can edit to suit your needs. 
+If you want to make changes to your server, or update to a newer version, just relevant changes in `config-values.yaml`, then run `install.sh` again. 
+
+After `install.sh` has finished, it will prompt you to make your first user if you have not yet. Create the user, and then login to chat.yourdomain.tld to use the server.
+admin.yourdomain.tld will allow you to create users and make new rooms, and users can edit their account info at account.yourdomain.tld.
