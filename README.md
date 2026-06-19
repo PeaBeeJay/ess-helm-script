@@ -25,15 +25,6 @@ Install and configure
 
 The only steps you need to complete outside of this script are pointing your domain to your server.
 
-### Matrix Authentication Service
-
-This script configures MAS (matrix authentication service) to allow users to create their own accounts. The default installation from the official ESS github assumes you will make a username and password for every member joining your server. I find this annoying, so I allow users to create their own accounts. 
-
-To add security, I configure MAS with **registration keys**. 
-
-When setting up an account, a new user will be prompted to enter a registration key, which needs to be created in the admin panel.
-Keys can be setup with multiple options such as being one time use, or expiring after a certain amount of days if they haven't been used. 
-
 ## DNS Setup
 
 Configure your domain with an 6 A name records pointing to the publix IP of the server:
@@ -77,5 +68,29 @@ The script will run through installing all the required packages and setting up 
 This will install the element server with the configured options in `config-values.yaml`, which you can edit to suit your needs. 
 If you want to make changes to your server, or update to a newer version, just relevant changes in `config-values.yaml`, then run `install.sh` again. 
 
+After running `./install.sh` you can create the first user by running `kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user
+`. You do not need to add an email to create the account. 
+
 After `install.sh` has finished, it will prompt you to make your first user if you have not yet. Create the user, and then login to chat.yourdomain.tld to use the server.
 admin.yourdomain.tld will allow you to create users and make new rooms, and users can edit their account info at account.yourdomain.tld.
+
+
+### Matrix Authentication Service
+
+This script configures MAS (matrix authentication service) to allow users to create their own accounts. The default installation from the official ESS github assumes you will make a username and password for every member joining your server. I find this annoying, so I allow users to create their own accounts. 
+
+To add security, I configure MAS with **registration keys**. 
+
+When setting up an account, a new user will be prompted to enter a registration key, which needs to be created in the admin panel.
+Keys can be setup with multiple options such as being one time use, or expiring after a certain amount of days if they haven't been used. 
+
+To create a registration key:
+1. Login to admin.yourdomain.tld using the credentials you created by running `kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user
+`
+2. Click Registration tokens on the left side menu.
+3. Click Add.
+4. You can manually enter the token, such as adding the potential users name if you know you who will be sending it to, or leave blank for a random string.
+5. You can set how many uses the key has.
+6. You can also set an expiration for the key.
+
+Once a token has been used itr will change from `Active` to `Used Up` in the admin portal. Tokens can also be revoked if you believe they are compromised. 
