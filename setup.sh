@@ -10,7 +10,7 @@ if [[ $update = n ]];then
     exit 1
 fi
 sleep 1
-echo "What is your domain name? Please input as domain.xyz (eg. google.com, whitehouse.gov>"
+echo "What is your domain name? Please input as domain.xyz (eg. google.com, whitehouse.gov)"
 read -r domain
 echo "Your server will be reached at chat.$domain, admin.$domain, and account.$domain"
 echo "Is this the domain you'd like to use? This cannot be changed after running install.sh (Y/n)"
@@ -86,10 +86,9 @@ chmod +x install.sh
 
 #install ufw and configure firewall
 echo "Installing UFW"
-apt install ufw -y
+apt install ufw -y > /dev/null 2>&1
 ufw enable
 echo "ufw installed, configuring firewall"
-sleep 3
 ufw allow 80/tcp
 ufw allow 443/tcp
 ufw allow 30001/tcp
@@ -100,12 +99,12 @@ echo "Firewall configured"
 #install K3s
 
 LOCAL_IP=$(hostname -I | awk '{print $1}')
-curl -sfL https://get.k3s.io | sh -
+curl -sfL https://get.k3s.io | sh - > /dev/null 2>&1
 
 mkdir -p ~/.kube
 
-echo "USER=$USER"
-echo "KUBECONFIG=$KUBECONFIG"
+#echo "USER=$USER"
+#echo "KUBECONFIG=$KUBECONFIG"
 
 export KUBECONFIG=~/.kube/config
 k3s kubectl config view --raw > "$KUBECONFIG"
@@ -145,7 +144,7 @@ EOF
 
 #install helm package manager
 echo "installing helm..."
-curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash > /dev/null 2>&1
 export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
 
 #create namespace
@@ -190,7 +189,7 @@ if [[ $answer = n ]];then
 else
         echo "Installing caddy...."
         sleep 1
-apt install caddy -y
+apt install caddy -y > /dev/null 2>&1
 cat > /etc/caddy/Caddyfile <<EOF
 $domain matrix.$domain account.$domain mrtc.$domain chat.$domain admin.$domain {
   reverse_proxy http://127.0.0.1:8080
@@ -199,4 +198,12 @@ EOF
 systemctl restart caddy
 fi
 #finish setup
-echo "Setup complete! Please run install.sh"
+echo "Setup complete! Would you like to run install.sh now? (y/n"
+read -r install
+if [[$install = y ]];then
+    echo "running install.sh"
+    ./install.sh
+else
+    echo "Please run install.sh when ready."
+    exit 1
+fi
