@@ -6,19 +6,36 @@ Installing ESS is not too complicated, but I found it intimidating when I first 
 
 This script is designed to run on any debian based system.
 
+I recommend renting a VPS online for your server so if you have a local power or internet outage, other members can still use the server. 
+I run my server on my own local hardware, but renting a cheap VPS online is probably the better way to go.
+The server can run on minimum spec of 2 CPU cores and 2 GB of memory. 
+
+
 This script will:
 
 Install and configure
-  - nginx
-  - ufw
+  - caddy reverse proxy
+  - ufw + firewall rules
+    - TCP 80, 443, 30001, and UDP 30002 must be allowed. OpenSSH is also configured.
   - traefik
   - Helm Charts
 
-The only steps you need to complete outside of this script are:
-  - Configure domains to point to your server
-  - add certificates from your registrar to your nginx
+The only steps you need to complete outside of this script are pointing your domain to your server.
 
-Setup
+DNS Setup
+
+Configure your domain with an A name record pointing to -
+- account
+- admin
+- chat
+- matrix
+- mrtc
+- one more pointing to the base domain name with full tld (eg. google.com)
+
+Your DNS records should look like:
+
+
+
   1. Make sure your system is up to date
      `apt-get update && apt-get upgrade`
   3. Install Curl
@@ -32,4 +49,4 @@ Setup
 
 The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`)
 
-The script will run through installing all the required packages and setting up necessary config files. The only part that will require input is at the end where it will ask if you want to configure nginx, enter y for yes, or n if you intend to setup your own reverse proxy. 
+The script will run through installing all the required packages and setting up necessary config files. The only part that will require input is at the end where it will ask if you want to configure , enter y for yes, or n if you intend to setup your own reverse proxy. 
