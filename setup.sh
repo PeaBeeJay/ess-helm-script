@@ -197,6 +197,7 @@ $domain matrix.$domain account.$domain mrtc.$domain chat.$domain admin.$domain {
   reverse_proxy http://127.0.0.1:8080
 }
 EOF
+systemctl restart caddy
 fi
 #finish setup
 echo "Setup complete! Please run install.sh"
