@@ -52,14 +52,19 @@ Your DNS records should look like:
 
 
   1. Make sure your system is up to date
+
      `apt-get update && apt-get upgrade`
-  3. Install Curl
+  3. Curl should be installed by default on any modern distro but if it isnt you will need to install it.
+
      `apt-get curl`
-  4. Download script
-      `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
+  5. Download script
+
+     `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
   4. Make script.sh executable
+
      `chmod +x script.sh`
-  5. Run script.sh
+  6. Run script.sh
+
      `./script.sh`
 
 The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`)
