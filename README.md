@@ -10,8 +10,9 @@ This script is designed to run on any debian based system.
 
 I recommend renting a VPS online for your server so if you have a local power or internet outage, other members can still use the server. 
 I run my server on my own local hardware, but renting a cheap VPS online is probably the better way to go.
-The server can run on minimum spec of 2 CPU cores and 2 GB of memory. 
+The server can run on minimum spec of 2 CPU cores and 2 GB of memory, 4 GB is recommended, and you should have more of each the more users you intend to be using the server at the same time. 
 
+The script assumes you are running as root. 
 
 ## This script will:
 
@@ -27,7 +28,7 @@ The only steps you need to complete outside of this script are pointing your dom
 
 ## DNS Setup
 
-Configure your domain with an 6 A name records pointing to the publix IP of the server:
+Configure your domain with six A name records pointing to the publix IP of the server:
 - account
 - admin
 - chat
@@ -48,15 +49,15 @@ Your DNS records should look like:
   3. Curl should be installed by default on any modern distro but if it isnt you will need to install it.
 
      `apt-get install curl`
-  5. Download script
+  5. Download setup.sh
 
      `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
-  4. Make script.sh executable
+  4. Make setup.sh executable
 
-     `chmod +x script.sh`
-  6. Run script.sh
+     `chmod +x setup.sh`
+  6. Run setup.sh
 
-     `./script.sh`
+     `./setup.sh`
 
 The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`)
 
@@ -93,4 +94,18 @@ To create a registration key:
 5. You can set how many uses the key has.
 6. You can also set an expiration for the key.
 
-Once a token has been used itr will change from `Active` to `Used Up` in the admin portal. Tokens can also be revoked if you believe they are compromised. 
+Once a token has been used it will change from `Active` to `Used Up` in the admin portal. Tokens can also be revoked if you believe they are compromised. 
+
+When a user goes to create an account they will be prompted to enter a token. You can disable token registration by setting `registration_token_required: false` in config-values.yaml. If you disable tokens, change 
+`password_registration_email_required:` from `false` to `true`, so that new users need to provide an email to create their account.
+
+To prevent spammers from hitting your server, you will want tokens, or email, or both enabled. **If neither is enabled, spammers will be able to create an account on your server.**
+
+### Federation
+
+Federation is also enabled in this setup, so users you create an account on your server can join other federated servers, and vice versa. You can test federation [here](https://federationtester.matrix.org/) by entering in yourdomain.tld.
+
+### Clients
+
+The default Element client is a fantastic client for using your server, but many alternatives exist if you don't like the default. A list of clients can be found [here](https://matrix.org/ecosystem/clients/)
+Please note some clients do not have voice or video call capabilities. 
