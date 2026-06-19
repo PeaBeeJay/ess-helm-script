@@ -77,9 +77,9 @@ helm upgrade --install \
   ess \
   oci://ghcr.io/element-hq/ess-helm/matrix-stack \
   -f ~/config-values.yaml
-
-echo "Install success! If you have not already, make an admin account
-by running 'kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user'"
+echo "finishing installation..."
+sleep 5
+echo "Install success! Please create first account by running command above."
 EOF
 
 chmod +x install.sh
@@ -114,7 +114,6 @@ chown "$USER:$USER" "$KUBECONFIG"
 export KUBECONFIG=~/.kube/config
 
 echo "configuring k3s"
-touch /var/lib/rancher/k3s/server/manifests/traefik-config.yaml
 cat > /var/lib/rancher/k3s/server/manifests/traefik-config.yaml <<EOF
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
