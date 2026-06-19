@@ -198,9 +198,9 @@ EOF
 systemctl restart caddy
 fi
 #finish setup
-echo "Setup complete! Would you like to run install.sh now? (y/n"
+echo "Setup complete! Would you like to run install.sh now? (y/n)"
 read -r install
-if [[$install = y ]];then
+if [[ $install = y ]];then
     echo "running install.sh"
     ./install.sh
 else
