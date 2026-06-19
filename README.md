@@ -56,7 +56,7 @@ Your DNS records should look like:
      `apt-get update && apt-get upgrade`
   3. Curl should be installed by default on any modern distro but if it isnt you will need to install it.
 
-     `apt-get curl`
+     `apt-get install curl`
   5. Download script
 
      `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
