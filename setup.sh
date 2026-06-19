@@ -46,7 +46,7 @@ matrixAuthenticationService:
         account:
           password_registration_enabled: true
           registration_token_required: true
-          password_registration_email_required: false
+          password_registration_email_required: true
           password_change_allowed: true
 
 matrixRTC:
