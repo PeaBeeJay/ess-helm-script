@@ -56,7 +56,7 @@ Your DNS records should look like:
   3. Install Curl
      `apt-get curl`
   4. Download script
-      `curl -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
+      `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
   4. Make script.sh executable
      `chmod +x script.sh`
   5. Run script.sh
