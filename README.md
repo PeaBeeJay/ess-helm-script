@@ -28,7 +28,7 @@ The only steps you need to complete outside of this script are pointing your dom
 
 ## DNS Setup
 
-Configure your domain with six A name records pointing to the publix IP of the server:
+Configure your domain with six A name records pointing to the public IP of the server:
 - account
 - admin
 - chat
@@ -46,16 +46,13 @@ Your DNS records should look like:
   1. Make sure your system is up to date
 
      `apt-get update && apt-get upgrade`
-  3. Curl should be installed by default on any modern distro but if it isnt you will need to install it.
-
-     `apt-get install curl`
-  5. Download setup.sh
+  2. Download setup.sh
 
      `wget -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
-  4. Make setup.sh executable
+  3. Make setup.sh executable
 
      `chmod +x setup.sh`
-  6. Run setup.sh
+  4. Run setup.sh
 
      `./setup.sh`
 
@@ -67,7 +64,7 @@ The script will run through installing all the required packages and setting up 
 `./install.sh`
 
 This will install the element server with the configured options in `config-values.yaml`, which you can edit to suit your needs. 
-If you want to make changes to your server, or update to a newer version, just relevant changes in `config-values.yaml`, then run `install.sh` again. 
+If you want to make changes to your server, or update to a newer version, just make relevant changes in `config-values.yaml`, then run `install.sh` again. 
 
 After running `./install.sh` you can create the first user by running `kubectl exec -n ess -it deployment/ess-matrix-authentication-service -- mas-cli manage register-user
 `. You do not need to add an email to create the account. 
