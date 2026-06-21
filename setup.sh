@@ -22,12 +22,6 @@ else
         sleep 1
 fi
 
-#install curl
-echo "Checking for curl, installing if missing..."
-
-apt-get install curl > /dev/null 2>&1
-echo "Done!"
-
 #setup config-values.yaml
 echo "Setting up config-values.yaml"
 cat > config-values.yaml <<EOF
