@@ -8,7 +8,6 @@ if [[ $update = n ]];then
     echo "Please manually update, then run installer"
     exit 1
 fi
-sleep 1
 echo "What is your domain name? Please input as domain.xyz (eg. google.com, whitehouse.gov)"
 read -r domain
 echo "Your server will be reached at chat.$domain, admin.$domain, and account.$domain"
@@ -24,10 +23,10 @@ else
 fi
 
 #install curl
-echo "Checking for cul, installing if missing..."
+echo "Checking for curl, installing if missing..."
 
 apt-get install curl > /dev/null 2>&1
-echo "Done!."
+echo "Done!"
 
 #setup config-values.yaml
 echo "Setting up config-values.yaml"
@@ -52,7 +51,7 @@ matrixAuthenticationService:
         account:
           password_registration_enabled: true
           registration_token_required: true
-          password_registration_email_required: true
+          password_registration_email_required: false
           password_change_allowed: true
 
 matrixRTC:
@@ -98,11 +97,11 @@ echo "Installing UFW"
 apt install ufw -y > /dev/null 2>&1
 ufw enable
 echo "ufw installed, configuring firewall"
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw allow 30001/tcp
-ufw allow 30002/udp
-sudo ufw allow OpenSSH
+ufw allow 80/tcp > /dev/null 2>&1
+ufw allow 443/tcp > /dev/null 2>&1
+ufw allow 30001/tcp > /dev/null 2>&1
+ufw allow 30002/udp > /dev/null 2>&1
+sudo ufw allow OpenSSH > /dev/null 2>&1
 echo "Firewall configured"
 
 #install K3s
@@ -155,7 +154,7 @@ echo "Done!"
 #install helm package manager
 echo "installing helm..."
 curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash > /dev/null 2>&1
-export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+echo `export KUBECONFIG=/etc/rancher/k3s/k3s.yaml` >> ~/.bashrc
 
 #create namespace
 echo "KUBECONFIG=$KUBECONFIG"
