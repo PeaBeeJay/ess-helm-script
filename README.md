@@ -48,7 +48,7 @@ Your DNS records should look like:
      `apt-get update && apt-get upgrade`
   2. Download setup.sh
 
-     `curl -o https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
+     `curl -o setup.sh https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
   3. Make setup.sh executable
 
      `chmod +x setup.sh`
