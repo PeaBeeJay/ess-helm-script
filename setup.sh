@@ -84,8 +84,7 @@ helm upgrade --install \
   oci://ghcr.io/element-hq/ess-helm/matrix-stack \
   -f ~/config-values.yaml
 echo "finishing installation..."
-sleep 5
-echo "Install success! Please create first account by running command above."
+echo "Install success!"
 EOF
 
 chmod +x install.sh
