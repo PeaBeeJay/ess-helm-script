@@ -4,7 +4,7 @@ This script is meant to automate the installation of the [Element Server Suite](
 
 I switched to using element as an alternative to discord, and would like to help more people do the same.
 
-Installing ESS is not too complicated, but I found it intimidating when I first attempted to do it. I hope this script will help you setup a server quickly.
+Installing ESS is not the most complicated thing, but I found it intimidating when I first attempted to do it. I hope this script will help you setup a server quickly.
 
 This script is designed to run on any debian based system.
 
@@ -21,7 +21,7 @@ Install and configure
   - ufw + firewall rules
     - TCP 80, 443, 30001, and UDP 30002 must be allowed. OpenSSH is also configured.
   - traefik
-  - K3s kubernetes cluster
+  - K3s
   - Helm Charts
 
 The only steps you need to complete outside of this script are pointing your domain to your server.
@@ -43,22 +43,30 @@ Your DNS records should look like:
 *(yes br4tz.com is the domain I am using in this example for testing, bratz.com was taken)*
 
 
-  1. Make sure your system is up to date
+1. Make sure your system is up to date
 
-     `apt-get update && apt-get upgrade`
-  2. Download setup.sh
+     ```
+     apt-get update && apt-get upgrade
+     ```
+2. Download setup.sh
 
-     `curl -o setup.sh https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh`
-  3. Make setup.sh executable
+     ```
+     curl -o setup.sh https://raw.githubusercontent.com/PeaBeeJay/ess-helm-script/refs/heads/main/setup.sh
+     ```
+3. Make setup.sh executable
+     ```
+     chmod +x setup.sh
+     ```
+4. Run setup.sh
+     ```
+     ./setup.sh
+     ```
 
-     `chmod +x setup.sh`
-  4. Run setup.sh
+The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`).
 
-     `./setup.sh`
+The script will run through installing all the required packages and setting up necessary config files. The only part that will require input is at the end where it will ask if you want to configure caddy, which you can skip if you have your own reverse proxy.
 
-The script will now ask you what domain will be used for your server. You will input your domain plus the TLD (eg. if you owned google.com you would enter `google.com`)
-
-The script will run through installing all the required packages and setting up necessary config files. The only part that will require input is at the end where it will ask if you want to configure , enter y for yes, or n if you intend to setup your own reverse proxy. 
+Refer to the official [ESS Helm Github](https://github.com/element-hq/ess-helm#certificates) for instructions for reverse proxy.  
 
 ### After setup script is complete, run install.sh
 `./install.sh`
