@@ -2,7 +2,6 @@
 #initial setup
 
 echo "Welcome to the unofficial ESS-Helm install script!"
-sleep 2
 echo "You must check for updates before script can be run. Is system up to date? (Y/n)"
 read -r update
 if [[ $update = n ]];then
@@ -24,7 +23,14 @@ else
         sleep 1
 fi
 
+#install curl
+echo "Checking for cul, installing if missing..."
+
+apt-get install curl > /dev/null 2>&1
+echo "Done!."
+
 #setup config-values.yaml
+echo "Setting up config-values.yaml"
 cat > config-values.yaml <<EOF
 # ess-values.yaml
 
@@ -63,6 +69,7 @@ ingress:
   tlsEnabled: true
 EOF
 
+echo "Done!"
 #setup install.sh
 echo "setting up install.sh..."
 cat > install.sh <<EOF
@@ -84,6 +91,8 @@ EOF
 
 chmod +x install.sh
 
+echo "Done!"
+
 #install ufw and configure firewall
 echo "Installing UFW"
 apt install ufw -y > /dev/null 2>&1
@@ -98,6 +107,7 @@ echo "Firewall configured"
 
 #install K3s
 
+echo "Installing K3s"
 LOCAL_IP=$(hostname -I | awk '{print $1}')
 curl -sfL https://get.k3s.io | sh - > /dev/null 2>&1
 
@@ -112,7 +122,6 @@ chmod 600 "$KUBECONFIG"
 chown "$USER:$USER" "$KUBECONFIG"
 export KUBECONFIG=~/.kube/config
 
-echo "configuring k3s"
 cat > /var/lib/rancher/k3s/server/manifests/traefik-config.yaml <<EOF
 apiVersion: helm.cattle.io/v1
 kind: HelmChartConfig
@@ -142,6 +151,7 @@ spec:
             allowEncodedSlash: true
 EOF
 
+echo "Done!"
 #install helm package manager
 echo "installing helm..."
 curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash > /dev/null 2>&1
@@ -179,6 +189,7 @@ spec:
         - '$LOCAL_IP'
 EOF
 
+echo "Done!"
 #install and configure caddy
 echo "Would you like to configure caddy? Skip if you have your own reverse proxy setup. (Y/n)"
 read -r answer
@@ -197,6 +208,7 @@ $domain matrix.$domain account.$domain mrtc.$domain chat.$domain admin.$domain {
 EOF
 systemctl restart caddy
 fi
+echo "Done!"
 #finish setup
 echo "Setup complete! Would you like to run install.sh now? (y/n)"
 read -r install
